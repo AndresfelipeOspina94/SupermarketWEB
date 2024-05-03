@@ -5,7 +5,7 @@ namespace SupermarketWEB.Data
 {
     public class SupermarketContext : DbContext
     {
-        protected SupermarketContext(DbContextOptions options) : base (options) 
+        public SupermarketContext(DbContextOptions options) : base (options) 
         {
         }
 
