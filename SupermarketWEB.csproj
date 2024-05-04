@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Providers\" />
+    <Folder Include="Pages\Products\" />
+  </ItemGroup>
+
 </Project>
