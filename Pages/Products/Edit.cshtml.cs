@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SupermarketWEB.Data;
 using SupermarketWEB.Models;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SupermarketWEB.Pages.Products
 {
-    public class CreateModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly SupermarketContext _context;
 
-        public CreateModel(SupermarketContext context)
+        public EditModel(SupermarketContext context)
         {
             _context = context;
         }
@@ -23,10 +24,23 @@ namespace SupermarketWEB.Pages.Products
         public SelectList CategoryList { get; set; }
         public SelectList ProviderList { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Product == null)
+            {
+                return NotFound();
+            }
+
             CategoryList = new SelectList(_context.Categories, "Id", "Name");
             ProviderList = new SelectList(_context.Providers, "Id", "Name");
+
             return Page();
         }
 
@@ -39,11 +53,30 @@ namespace SupermarketWEB.Pages.Products
                 return Page();
             }
 
-            _context.Products.Add(Product);
-            await _context.SaveChangesAsync();
+            _context.Attach(Product).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(Product.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return RedirectToPage("./Index");
         }
+
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.Id == id);
+        }
     }
 }
-
