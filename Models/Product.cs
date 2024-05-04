@@ -12,5 +12,7 @@ namespace SupermarketWEB.Models
         public int Stock { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public int ProviderId { get; set; }
+        public Provider Provider { get; set; }
     }
 }
