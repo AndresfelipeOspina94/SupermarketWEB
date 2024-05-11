@@ -23,7 +23,7 @@ namespace SupermarketWEB.Pages.Products
         public SelectList CategoryList { get; set; }
         public SelectList ProviderList { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             CategoryList = new SelectList(_context.Categories, "Id", "Name");
             ProviderList = new SelectList(_context.Providers, "Id", "Name");
@@ -32,7 +32,7 @@ namespace SupermarketWEB.Pages.Products
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _context.Products == null || Product == null)
             {
                 CategoryList = new SelectList(_context.Categories, "Id", "Name");
                 ProviderList = new SelectList(_context.Providers, "Id", "Name");
