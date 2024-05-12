@@ -5,9 +5,11 @@ using SupermarketWEB.Data;
 using SupermarketWEB.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SupermarketWEB.Pages.Products
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly SupermarketContext _context;
